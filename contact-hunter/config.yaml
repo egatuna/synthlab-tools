@@ -1,0 +1,47 @@
+# contact-hunter configuration
+# Global request pacing — >= 2s between ALL outbound requests (politeness / PRD).
+request_delay_s: 2
+timeout_s: 10
+
+# Realistic desktop User-Agent (with a tool tag so hosts can identify us).
+user_agent: >-
+  Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36
+  (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36 SynthLabContactHunter/1.0
+
+# Relative paths (joined onto each business homepage) likely to hold an email.
+contact_paths:
+  - /contact
+  - /contact-us
+  - /about
+  - /about-us
+
+# Local-parts used to synthesise pattern candidates when nothing is scraped.
+# <firstname>@domain is added automatically when an owner first name is known.
+email_patterns:
+  - info
+  - contact
+  - hello
+  - office
+  - admin
+
+# Emails whose domain OR local-part contains any of these are discarded as junk.
+junk_domains:
+  - example.com
+  - example.org
+  - example.net
+  - domain.com
+  - yourdomain.com
+  - email.com
+  - sentry.io
+  - sentry.wixpress.com
+  - sentry-next.wixpress.com
+  - wixpress.com
+  - wix.com
+  - squarespace.com
+  - godaddy.com
+  - schema.org
+  - w3.org
+  - googleapis.com
+  - gstatic.com
+  - cloudflare.com
+  - fontawesome.com

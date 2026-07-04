@@ -1,0 +1,25 @@
+# booking-bridge — Calendly replacement
+# Public booking page = a Jotform form with a time-slot dropdown.
+# Two flows (run by the automation-runner dispatcher) keep it honest:
+#   flows/slots-refresh.md  — weekly: regenerate the dropdown from Calendar availability
+#   flows/booking-poll.md   — every 30 min: new submissions -> conflict-checked Calendar event
+
+form:
+  # Filled in after the form is created (see README)
+  jotform_form_id: "261846157248061"   # https://form.jotform.com/261846157248061
+  title: "Book a call with SynthLab Co"
+
+availability:
+  timezone: America/Indiana/Indianapolis
+  working_days: [Mon, Tue, Wed, Thu, Fri]
+  working_hours_start: "09:00"
+  working_hours_end: "17:00"
+  slot_minutes: 30
+  lookahead_days: 14
+  min_notice_hours: 24        # never offer slots sooner than this
+  max_slots_offered: 40       # keep the dropdown manageable
+
+event:
+  calendar: primary
+  title_template: "SynthLab call — {name}"
+  duration_minutes: 30

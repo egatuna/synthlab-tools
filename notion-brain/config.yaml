@@ -1,0 +1,12 @@
+# notion-brain configuration — a Notion AI replacement over Google Drive docs.
+
+# Google Drive folders (by name) the drive-sync flow pulls into cache/.
+drive_folders:
+  - SynthLab
+
+cache_dir: cache        # relative to this tool dir unless absolute
+
+# Retrieval
+top_k: 6                # BM25 chunks fed to the LLM per question
+chunk_chars: 3000       # target characters per chunk
+chunk_overlap: 200      # character overlap between adjacent chunks

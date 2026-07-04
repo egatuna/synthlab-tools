@@ -1,0 +1,8 @@
+# seo-scout configuration
+max_pages: 25          # BFS crawl budget (same registered domain)
+crawl_delay_s: 1.0     # politeness delay between page fetches
+timeout_s: 10          # per-request timeout
+user_agent: >-
+  Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36
+  (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36 SynthLabSeoScout/1.0
+lighthouse: true       # run npx lighthouse on the homepage (auto-skips on failure)

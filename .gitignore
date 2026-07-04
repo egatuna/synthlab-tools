@@ -1,0 +1,10 @@
+.env
+tools.db
+logs/
+__pycache__/
+*.pyc
+clip-forge/output/
+clip-forge/work/
+notion-brain/cache/
+automation-runner/state/
+.DS_Store

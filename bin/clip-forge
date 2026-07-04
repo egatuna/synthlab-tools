@@ -1,0 +1,2 @@
+#!/bin/sh
+exec /opt/anaconda3/bin/python3 "/Users/eanngatuna/synthlab-tools/clip-forge/clipforge.py" "$@"

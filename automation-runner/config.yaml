@@ -1,0 +1,13 @@
+# automation-runner configuration.
+# Paths are relative to the repo root. Missing directories are skipped silently,
+# so sibling tools can ship their own flows/ dir without breaking this runner.
+flows_dirs:
+  - automation-runner/flows
+  - booking-bridge/flows
+  - notion-brain/flows
+
+# Model passed to `claude -p --model`.
+claude_model: sonnet
+
+# Default per-flow timeout (seconds) when a flow omits `timeout_seconds`.
+default_timeout: 600

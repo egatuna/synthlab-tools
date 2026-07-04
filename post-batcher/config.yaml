@@ -1,0 +1,23 @@
+# post-batcher configuration — SynthLab Co social queue
+
+queue_dir: queue        # relative to this tool dir unless absolute
+
+# Brand voice used when generating posts.
+voice: >-
+  SynthLab Co is a solo, AI-powered web studio. Voice is practical, confident,
+  and specific. Zero corporate fluff, no buzzwords, no hype, no emoji.
+  Write like a sharp operator who ships. Concrete over abstract.
+
+platforms:
+  X:
+    # Hard character ceiling. Enforced in code after generation.
+    limit: 280
+  LinkedIn:
+    # Approximate visible ceiling before the "…see more" fold.
+    # Multi-line, line-broken, no hashtag spam.
+    limit: 1300
+  TikTok:
+    # Caption text (excluding hashtags) must fit this; plus 3-5 hashtags.
+    caption_limit: 150
+    min_hashtags: 3
+    max_hashtags: 5

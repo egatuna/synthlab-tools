@@ -1,0 +1,24 @@
+# synthlab-tools — single source of truth for all schedules.
+# Install:  crontab ~/synthlab-tools/crontab.txt
+# Inspect:  crontab -l        Remove:  crontab -r
+# Host is on 24/7; times are local (America/Indiana/Indianapolis).
+
+PATH=/opt/anaconda3/bin:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin
+PY=/opt/anaconda3/bin/python3
+ROOT=/Users/eanngatuna/synthlab-tools
+
+# automation-runner dispatcher — runs every due flow (stripe-receipt,
+# jotform-intake, morning-brief, booking slots-refresh + poll, drive-sync)
+*/5 * * * * cd $ROOT && $PY automation-runner/runner.py tick >> $ROOT/logs/cron.log 2>&1
+
+# seo-scout — weekly keyword rank tracking (Mon 08:00)
+0 8 * * 1 cd $ROOT && $PY seo-scout/seoscout.py rank >> $ROOT/logs/cron.log 2>&1
+
+# post-batcher — daily "today's posts" digest (08:00)
+0 8 * * * cd $ROOT && $PY post-batcher/postbatcher.py digest >> $ROOT/logs/cron.log 2>&1
+
+# notion-brain — nightly index at 02:30 (drive-sync flow runs at 02:00 via dispatcher)
+30 2 * * * cd $ROOT && $PY notion-brain/brain.py index >> $ROOT/logs/cron.log 2>&1
+
+# notion-brain — weekly docs digest (Sun 17:00)
+0 17 * * 0 cd $ROOT && $PY notion-brain/brain.py digest >> $ROOT/logs/cron.log 2>&1

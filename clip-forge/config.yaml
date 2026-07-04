@@ -1,0 +1,26 @@
+# clip-forge configuration
+# All knobs are optional; the values here are the built-in defaults.
+
+# faster-whisper model size: tiny | base | small | medium | large-v3
+whisper_model: base
+
+# Segment selection
+min_hook_score: 7      # clips scoring below this are skipped (not rendered)
+clip_min_s: 15         # shortest allowed clip (seconds)
+clip_max_s: 60         # longest allowed clip (seconds)
+
+# 9:16 center-crop horizontal focal point.
+# -1 = crop hugs the left edge, 0 = centered, 1 = hugs the right edge.
+focal_offset: 0.0
+
+# Burned-in caption style (ASS). Tuned for a 1080x1920 canvas.
+caption:
+  font: Arial
+  size: 64             # ~64px at 1920px height
+  outline: 4           # black outline thickness (px) for high contrast
+  margin_v: 420        # vertical margin from bottom -> caption sits ~78% down
+  words_per_line: 4    # group word timestamps into lines of up to N words
+
+# Filesystem
+output_dir: output
+work_dir: work
