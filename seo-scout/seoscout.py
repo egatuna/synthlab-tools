@@ -212,7 +212,8 @@ def analyze_page(url: str, status: int, html: str | None) -> PageReport:
     desc = soup.find("meta", attrs={"name": "description"})
     if desc and desc.get("content"):
         report.meta_description = desc["content"].strip()
-    report.h1s = [h.get_text(strip=True) for h in soup.find_all("h1")]
+    report.h1s = [" ".join(h.get_text(" ", strip=True).split())
+                  for h in soup.find_all("h1")]
 
     for tag in soup(["script", "style", "noscript"]):
         tag.decompose()
