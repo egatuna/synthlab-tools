@@ -32,6 +32,9 @@ junk_domains:
   - domain.com
   - yourdomain.com
   - email.com
+  - company.com
+  - yourcompany.com
+  - mysite.com
   - sentry.io
   - sentry.wixpress.com
   - sentry-next.wixpress.com

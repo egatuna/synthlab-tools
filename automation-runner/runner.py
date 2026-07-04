@@ -375,11 +375,23 @@ def interpret_output(output: str) -> ExecResult:
     return ExecResult(False, "flow did not end with FLOW_OK", output[-1500:])
 
 
+def _log_transcript(flow: Flow, res: ExecResult) -> None:
+    """Append the flow's full claude output to logs/flows/<flow>/<date>.log —
+    the audit trail of what the LLM actually did on each run."""
+    day_dir = REPO / "logs" / "flows" / flow.name
+    day_dir.mkdir(parents=True, exist_ok=True)
+    stamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    status = "OK" if res.ok else f"FAIL ({res.reason})"
+    with open(day_dir / f"{datetime.now():%Y-%m-%d}.log", "a") as f:
+        f.write(f"\n===== {stamp} — {status} =====\n{res.output.strip()}\n")
+
+
 def run_flow(flow: Flow, cfg: Config, *, forced: bool = False) -> ExecResult:
     """Execute one flow and record the outcome via shared logging/notify."""
     trigger = "forced" if forced else "scheduled"
     notify.log(TOOL, f"running flow '{flow.name}' ({trigger})")
     res = execute_flow(flow, cfg)
+    _log_transcript(flow, res)
     if res.ok:
         notify.log(TOOL, f"flow '{flow.name}' OK")
         db.record_run(TOOL, "ok", f"flow {flow.name} ok ({trigger})")

@@ -231,9 +231,14 @@ def do_ask(cfg: dict, question: str, mock: bool = False) -> int:
         answer = llm.complete(_ask_prompt(question, hits), system=_ASK_SYSTEM)
 
     print(answer.strip())
-    print("\nSources:")
-    for s in sources:
-        print(f"  - {s}")
+    if NO_ANSWER in answer:
+        # retrieval surfaced chunks, but none contained the answer —
+        # listing them as "Sources" would misread as attribution
+        print("\nSources: none (retrieved excerpts did not contain the answer)")
+    else:
+        print("\nSources:")
+        for s in sources:
+            print(f"  - {s}")
     notify.log(TOOL, f"ask ({len(hits)} hits, mock={mock}): {question[:80]}")
     return 0
 
