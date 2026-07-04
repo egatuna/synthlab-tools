@@ -1,63 +1,64 @@
 # SEO Scout Report — synthlabco.com
 *2026-07-04*  ·  prepared by SynthLab
 
-## Overall score: 74/100
+## Overall score: 76/100
 
-Your site's basics are in genuinely good shape — every page has proper titles, descriptions, and image labels, which puts you ahead of most small-business sites. The two things holding you back are that the site never shows a phone number or location (so Google struggles to show you to nearby customers), and a behind-the-scenes mix-up where pages point Google to a slightly different web address than the one visitors use. Both are inexpensive fixes your web person can knock out in an afternoon, and they'll do more for you than any amount of new content right now.
+The technical side of your website is in genuinely good shape: every page has proper titles, descriptions, and clean structure, and Google can read it all without trouble. The big gap is local presence: there is no phone number, no address or service area, and no pages tied to the places you serve, so Google has little reason to show you to nearby customers. Add your contact details everywhere, claim your Google Business Profile, and build a simple areas-we-serve page, and your local visibility should improve noticeably.
 
 ### Scorecard
 | Area | Score |
 | --- | --- |
 | Titles & meta | 92/100 |
-| Content | 80/100 |
-| Local SEO | 42/100 |
-| Technical | 70/100 |
-| Mobile speed | 72/100 |
+| Content | 82/100 |
+| Local SEO | 38/100 |
+| Technical | 95/100 |
+| Mobile speed | 84/100 |
 
 ### Google Lighthouse (homepage)
 | Category | Score |
 | --- | --- |
-| Performance | 75/100 |
+| Performance | 84/100 |
 | Seo | 100/100 |
 | Accessibility | 92/100 |
 | Best Practices | 100/100 |
 
 ### Priority fixes
-#### P0 — Six pages tell Google their 'official address' is a different URL than the one visitors actually see (e.g. the page loads at /services but claims its real home is /services.html)
-**Why it matters:** Google gets two different addresses for the same page and may split credit between them or rank the wrong one, which can quietly drag every page on the site down in search results.
+#### P0 — No phone number anywhere on the site
+**Why it matters:** People who want to hire you often just want to call. If there is no number, many will leave and call a competitor instead. Google also uses your phone number to connect your website to your business listing on Maps.
 
-**How to fix:** Have your web person make each page point to itself using the exact same web address the page loads at — the version without .html on the end — so Google sees one clear address per page.
+**How to fix:** Add your business phone number to the top or bottom of every page, and make it tappable on phones. Use the exact same number you use on your Google Business Profile and anywhere else online.
 
-#### P0 — No phone number or business address appears anywhere on the site
-**Why it matters:** People searching for a business near them want to see where you are and how to call you before they reach out. Google also uses your phone and location to decide whether to show you when someone nearby searches — with neither on the site, you're nearly invisible in local results and you lose customers who prefer to call.
+#### P0 — No address or service area listed
+**Why it matters:** Google decides which local searches to show you for partly based on where you say you are. Right now the site only says 'Indiana' in passing, so Google has little reason to show you to people searching in your actual towns.
 
-**How to fix:** Add your business phone number and your city/state (or full address if you serve walk-ins) to the footer of every page and prominently on the Contact page. Then create or claim a free Google Business Profile using the exact same phone and location, and link it to the site.
+**How to fix:** Add your city and state (or the list of areas you serve) to the footer, the contact page, and the about page. If you work from home and do not want to publish a street address, listing your city plus 'serving X, Y, and Z' works fine.
 
-#### P1 — Main headlines have words stuck together behind the scenes (Google reads 'runwhile you sleep', 'Four pillars ofleverage', 'Get a freequote')
-**Why it matters:** The headline is one of the strongest clues Google uses to understand what a page is about. When words are mashed together, Google can't match your pages to what people actually type, like 'free quote'.
+#### P1 — Business details are missing from the behind-the-scenes business info Google reads
+**Why it matters:** The site already includes hidden business information that Google reads, which is great, but it is missing the phone number, address or service area, and opening hours. Filling these in helps Google trust and display your business correctly.
 
-**How to fix:** Have your web person add a proper space where the headline text breaks onto a new line, on all seven pages, then reread each headline as plain text to confirm every word is separated.
+**How to fix:** Have your web person add the phone number, service area, and hours to the existing business information already built into the site. It is a small edit, not a rebuild.
 
-#### P1 — Page loading speed scores 75 out of 100
-**Why it matters:** Slower pages make visitors give up before the page finishes loading, especially on phones, and Google prefers faster sites when deciding who ranks higher.
+#### P1 — No pages aimed at the specific places you serve
+**Why it matters:** Someone searching for your service usually adds a town name. With no page mentioning those towns, you rarely show up for those searches even if your work is better than the competition's.
 
-**How to fix:** Ask your web person to run Google's free PageSpeed Insights tool on the homepage, then fix the top items it lists — usually shrinking large images and trimming files the page loads before it appears.
+**How to fix:** Create a simple page for each main area you serve (or one 'areas we serve' page to start). Describe real work you have done there and how to reach you.
 
-#### P2 — The site's business listing code doesn't include a phone number or location
-**Why it matters:** There's special behind-the-scenes labeling that tells Google exactly what kind of business you are, where you're located, and how to reach you. Yours exists but is missing the contact details, so Google can't connect the site to a real place.
+#### P2 — No reviews, testimonials, or links to outside proof
+**Why it matters:** None of your pages link out to anything, and there is no visible customer feedback. Both people and Google look for outside signs that a business is real and trusted.
 
-**How to fix:** Once your phone and location are added to the pages, have your web person add them to that behind-the-scenes business labeling too, matching your Google Business Profile word for word.
+**How to fix:** Ask happy customers for Google reviews, then show a few of those reviews on your homepage with a link to your Google profile.
 
-#### P2 — No links out to trusted sources or your own profiles anywhere on the site
-**Why it matters:** Linking to your Google Business Profile, social accounts, and reputable sources helps Google confirm you're a real, established business.
+#### P2 — Pages load a bit slower than they could
+**Why it matters:** Your speed score is 84 out of 100, which is decent but not great. Slow pages lose impatient visitors, especially on phones, and speed is a small factor in rankings.
 
-**How to fix:** Add footer links to your Google Business Profile, LinkedIn, and any review or directory profiles you have, and link to relevant trusted sources within your case studies.
+**How to fix:** Ask your web person to shrink large images and remove anything heavy the pages load that is not needed. Getting the score above 90 is usually a quick job on a small site.
 
 ### Quick wins
-- Add a space to fix the mashed-together words in the headlines on all seven pages — a five-minute edit with real ranking impact
-- Put your phone number and city/state in the site footer so it shows on every page
-- Create or claim your free Google Business Profile and link it from the site
-- Update the six 'official address' tags so each page points to the URL it actually loads at
+- Put your phone number in the header or footer of every page and make it click-to-call.
+- Add your city and service area to the footer and contact page.
+- Set up (or claim and complete) your Google Business Profile with the same name, number, and area as the website.
+- Show 2-3 real customer reviews on the homepage.
+- Add your service area to the homepage title, for example 'AI Systems, Automation & Custom Websites in [City], Indiana'.
 
 ---
 ## Appendix — per-page findings
@@ -68,44 +69,44 @@ Crawled 7 page(s).
 `status 200 · 691 words · 1 H1 · 0 img-no-alt · schema: Organization, ProfessionalService, WebSite`
 
 - **Title:** SynthLab Co — AI Systems, Automation & Custom Websites
-- **Meta:** SynthLab Co builds fast, modern websites for small businesses and automates the busywork behind them: lead follow-up, data entry, reporting. Systems you own outright. Remote-first, based in Indiana.
+- **Meta:** SynthLab Co builds fast, modern websites for small businesses and automates the busywork behind them. Systems you own outright. Remote-first, based in Indiana.
 - **Canonical:** https://synthlabco.com/
 - **Links:** 29 internal / 0 external
-- **Issues:** meta description too long (198 chars)
+- **Issues:** OK
 
 ### https://synthlabco.com/services
 `status 200 · 871 words · 1 H1 · 0 img-no-alt · schema: BreadcrumbList, OfferCatalog`
 
 - **Title:** Services — SynthLab Co
-- **Meta:** Four services from SynthLab Co: fast custom websites, workflow automation, AI content pipelines, and full connected systems. Fixed-scope builds you own outright, no lock-in.
-- **Canonical:** https://synthlabco.com/services.html
+- **Meta:** Four services from SynthLab Co: custom websites, workflow automation, AI content pipelines, and connected systems. Fixed-scope builds you own, no lock-in.
+- **Canonical:** https://synthlabco.com/services
 - **Links:** 26 internal / 0 external
-- **Issues:** meta description too long (173 chars)
+- **Issues:** OK
 
 ### https://synthlabco.com/work
 `status 200 · 711 words · 1 H1 · 0 img-no-alt · schema: BreadcrumbList, ProfessionalService`
 
 - **Title:** Work — SynthLab Co
-- **Meta:** Case studies from SynthLab Co — real systems shipped to production. Custom edge-delivered websites, AI content pipelines, and lead-generation engines for regional businesses, digital product lines, and local service brands.
-- **Canonical:** https://synthlabco.com/work.html
+- **Meta:** Case studies from SynthLab Co — real systems shipped to production: custom websites, AI content pipelines, and lead-generation engines for small businesses.
+- **Canonical:** https://synthlabco.com/work
 - **Links:** 27 internal / 0 external
-- **Issues:** meta description too long (223 chars)
+- **Issues:** OK
 
 ### https://synthlabco.com/about
 `status 200 · 822 words · 1 H1 · 0 img-no-alt · schema: BreadcrumbList, ProfessionalService`
 
 - **Title:** About — SynthLab Co
-- **Meta:** SynthLab Co is a remote-first studio, based in Indiana, building fast websites and business automation you own outright. We close the gap between 2010-era operations and 2026 budgets.
-- **Canonical:** https://synthlabco.com/about.html
+- **Meta:** SynthLab Co is a remote-first Indiana studio building fast websites and business automation you own outright — closing the gap between old ops and new budgets.
+- **Canonical:** https://synthlabco.com/about
 - **Links:** 26 internal / 0 external
-- **Issues:** meta description too long (183 chars)
+- **Issues:** OK
 
 ### https://synthlabco.com/contact
 `status 200 · 283 words · 1 H1 · 0 img-no-alt · schema: BreadcrumbList, ProfessionalService`
 
 - **Title:** Contact — SynthLab Co
 - **Meta:** Get a free quote from SynthLab Co. Tell us about your project: custom websites, workflow automation, and AI content pipelines. We respond within 24 hours.
-- **Canonical:** https://synthlabco.com/contact.html
+- **Canonical:** https://synthlabco.com/contact
 - **Links:** 24 internal / 0 external
 - **Issues:** OK
 
@@ -114,7 +115,7 @@ Crawled 7 page(s).
 
 - **Title:** Privacy Policy — SynthLab Co
 - **Meta:** How SynthLab Co collects, uses, and protects information from visitors to our marketing website and contact form.
-- **Canonical:** https://synthlabco.com/privacy-policy.html
+- **Canonical:** https://synthlabco.com/privacy-policy
 - **Links:** 25 internal / 0 external
 - **Issues:** OK
 
@@ -123,7 +124,7 @@ Crawled 7 page(s).
 
 - **Title:** Terms & Conditions — SynthLab Co
 - **Meta:** The terms and conditions governing use of the SynthLab Co website. Specific client engagements are governed by a separate signed project agreement.
-- **Canonical:** https://synthlabco.com/terms-and-conditions.html
+- **Canonical:** https://synthlabco.com/terms-and-conditions
 - **Links:** 24 internal / 0 external
 - **Issues:** OK
 
