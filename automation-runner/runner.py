@@ -566,6 +566,12 @@ def build_parser() -> argparse.ArgumentParser:
 
 def main(argv: list[str] | None = None) -> int:
     """Entry point. Returns a process exit code."""
+    _hold = Path(__file__).with_name(".ON_HOLD")
+    if _hold.exists():
+        reason = _hold.read_text().strip() or "parked until fixed"
+        print(f"automation-runner is ON HOLD — {reason}", file=sys.stderr)
+        print(f"(lift the hold by removing {_hold})", file=sys.stderr)
+        return 0
     args = build_parser().parse_args(argv)
     cfg = load_config()
 

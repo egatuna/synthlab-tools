@@ -1,0 +1,5 @@
+On hold since 2026-07-06 by owner request. Do not run until fully working.
+Trigger: repeated dispatcher failures 2026-07-06 15:37-16:39 (MCP flows
+"Not logged in" / "mcp unavailable" — upstream connector regression #36587).
+Cron schedule for the tick is also commented out in crontab.txt.
+Lift by deleting this file AND uncommenting the tick line in crontab.txt.

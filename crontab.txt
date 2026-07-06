@@ -9,7 +9,10 @@ ROOT=/Users/eanngatuna/synthlab-tools
 
 # automation-runner dispatcher — runs every due flow (stripe-receipt,
 # jotform-intake, morning-brief, booking slots-refresh + poll, drive-sync)
-*/5 * * * * cd $ROOT && $PY automation-runner/runner.py tick >> $ROOT/logs/cron.log 2>&1
+# ON HOLD 2026-07-06 (owner request): dispatcher failed repeatedly 15:37-16:39
+# on MCP connector regression #36587. Re-enable by removing automation-runner/.ON_HOLD
+# AND uncommenting the line below.
+# */5 * * * * cd $ROOT && $PY automation-runner/runner.py tick >> $ROOT/logs/cron.log 2>&1
 
 # seo-scout — weekly keyword rank tracking (Mon 08:00)
 0 8 * * 1 cd $ROOT && $PY seo-scout/seoscout.py rank >> $ROOT/logs/cron.log 2>&1

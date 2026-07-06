@@ -1,7 +1,7 @@
 ---
 name: notion-brain-drive-sync
 schedule: "0 2 * * *"
-enabled: true
+enabled: false  # paused 2026-07-06 — claude.ai connectors unavailable in headless claude -p (github.com/anthropics/claude-code issue #36587); re-enable when fixed
 allowed_tools: [mcp__claude_ai_Google_Drive]
 timeout_seconds: 900
 ---

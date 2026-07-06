@@ -517,6 +517,12 @@ def run(input_path: Path, out_path: Path | None, cfg: Config) -> int:
 
 
 def main(argv: list[str] | None = None) -> int:
+    _hold = Path(__file__).with_name(".ON_HOLD")
+    if _hold.exists():
+        reason = _hold.read_text().strip() or "parked until fixed"
+        print(f"contact-hunter is ON HOLD — {reason}", file=sys.stderr)
+        print(f"(lift the hold by removing {_hold})", file=sys.stderr)
+        return 0
     parser = argparse.ArgumentParser(prog="hunter", description="Find + verify business emails from a lead file.")
     sub = parser.add_subparsers(dest="cmd", required=True)
     run_p = sub.add_parser("run", help="enrich a leads.md file with emails")
