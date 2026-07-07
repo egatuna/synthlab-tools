@@ -6,6 +6,10 @@
 PATH=/opt/anaconda3/bin:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin
 PY=/opt/anaconda3/bin/python3
 ROOT=/Users/eanngatuna/synthlab-tools
+# Headless Claude Code auth: cron's `claude -p` reads ~/.claude/.credentials.json
+# (claudeAiOauth entry) — that is the real auth path. The OAuth token is NOT stored
+# here because this file is git-tracked; a manual-recovery copy lives in the gitignored
+# .env (see .env comment). Do NOT paste the token into this file or export it in ~/.zshenv.
 
 # automation-runner dispatcher — runs every due flow (stripe-receipt,
 # jotform-intake, morning-brief, booking slots-refresh + poll, drive-sync)
