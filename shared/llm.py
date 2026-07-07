@@ -32,6 +32,14 @@ FALLBACK_MODEL = "claude-opus-4-8"
 _CLI_ALIAS = {DEFAULT_MODEL: "sonnet", JUDGMENT_MODEL: "opus", FALLBACK_MODEL: "opus"}
 
 
+# Only these keys are loaded from .env into the process env. The .env also
+# holds a manual-recovery CLAUDE_CODE_OAUTH_TOKEN; loading it here would push it
+# into every `claude -p` subprocess and override the Max-login keychain auth
+# (the exact failure the global "never export CLAUDE_CODE_OAUTH_TOKEN" rule
+# guards against). Whitelist, so the token stays inert on disk.
+_DOTENV_ALLOWED = ("ANTHROPIC_API_KEY", "SYNTHLAB_LLM_DEFAULT", "SYNTHLAB_LLM_JUDGMENT")
+
+
 def _load_dotenv() -> None:
     env_file = REPO / ".env"
     if not env_file.exists():
@@ -40,7 +48,9 @@ def _load_dotenv() -> None:
         line = line.strip()
         if line and not line.startswith("#") and "=" in line:
             k, v = line.split("=", 1)
-            os.environ.setdefault(k.strip(), v.strip().strip("'\""))
+            k = k.strip()
+            if k in _DOTENV_ALLOWED:
+                os.environ.setdefault(k, v.strip().strip("'\""))
 
 
 _load_dotenv()

@@ -619,7 +619,9 @@ def websearch_serp(keyword: str, cfg_model: str = "sonnet", timeout: int = 300) 
         arr = json.loads(m.group(0))
     except json.JSONDecodeError:
         return []
-    return [str(d).strip().lower().lstrip("www.") for d in arr if isinstance(d, (str,))]
+    # removeprefix, not lstrip: lstrip("www.") strips the char set {w,.} and
+    # corrupts domains like wine.com -> ine.com.
+    return [str(d).strip().lower().removeprefix("www.") for d in arr if isinstance(d, (str,))]
 
 
 def _position_of(target: str, serp: list[str]) -> int | None:

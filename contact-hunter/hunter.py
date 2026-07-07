@@ -394,7 +394,9 @@ def _domain_of(url: str | None) -> str | None:
     if not url:
         return None
     netloc = urlparse(url if "://" in url else "http://" + url).netloc
-    return netloc.split(":")[0].lstrip("www.").lower() or None
+    # removeprefix, not lstrip: lstrip("www.") strips the CHAR SET {w,.} and
+    # corrupts domains like wine.com -> ine.com, wixsite.com -> ixsite.com.
+    return netloc.split(":")[0].lower().removeprefix("www.") or None
 
 
 def _domain_of_email(email: str) -> str:
