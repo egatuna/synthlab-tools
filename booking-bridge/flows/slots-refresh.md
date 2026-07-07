@@ -1,7 +1,7 @@
 ---
 name: booking-slots-refresh
 schedule: "0 6 * * 1"
-enabled: false  # paused 2026-07-06 — claude.ai connectors unavailable in headless claude -p (github.com/anthropics/claude-code issue #36587); re-enable when fixed
+enabled: false  # paused 2026-07-06 — claude.ai connectors unavailable in headless claude -p (github.com/anthropics/claude-code #36587, still broken on 2.1.202, now tracked as #75059); re-enable when a -p session lists mcp__claude_ai_* tools
 allowed_tools: [mcp__claude_ai_Google_Calendar, mcp__claude_ai_Jotform]
 timeout_seconds: 900
 ---
