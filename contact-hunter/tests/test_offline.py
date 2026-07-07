@@ -172,15 +172,54 @@ def test_output_blocks():
     check("Ghost Business" in out, "untouched section preserved")
 
 
+BULLET_LEADS = """# Leads
+- Stripe | stripe.com | John Doe
+- GitHub | github.com | Jane Smith
+- Placeholder | example.com | Test User
+"""
+
+
+def test_parse_bullets():
+    # regression: the exact input shape behind the 2026-07-06 "no businesses parsed" failure
+    print("test_parse_bullets")
+    businesses, fmt = hunter.parse_leads(BULLET_LEADS)
+    check(fmt == "bullets", f"format detected as bullets (got {fmt})")
+    check(len(businesses) == 3, f"parsed 3 bullet leads (got {len(businesses)})")
+    by_name = {b.name: b for b in businesses}
+    check("Stripe" in by_name, "bullet name cell parsed")
+    st = by_name.get("Stripe")
+    if st:
+        check(st.website == "stripe.com", f"bare domain extracted (got {st.website})")
+        check(st.owner == "John Doe", f"bullet owner parsed (got {st.owner})")
+    # prose bullets without pipes must never become leads (protects block-format files)
+    prose = "# Riverbend Roofing\n- Website: https://riverbendroofing.test\n- great crew\n"
+    businesses2, fmt2 = hunter.parse_leads(prose)
+    check(fmt2 == "blocks", f"pipe-less bullets stay block-format (got {fmt2})")
+    check(len(businesses2) == 1, f"one block business, prose bullets not split (got {len(businesses2)})")
+
+
+def test_output_bullets():
+    print("test_output_bullets")
+    businesses, fmt = hunter.parse_leads(BULLET_LEADS)
+    for b in businesses:
+        b.confidence = "none"
+    out = hunter.render_output(BULLET_LEADS, businesses, fmt)
+    check(out.count("**Email:**") == 3, "every bullet line annotated")
+    check("- Stripe | stripe.com | John Doe | **Email:**" in out, "annotation appended inline")
+    check("# Leads" in out, "heading preserved")
+
+
 def main() -> int:
     for t in (
         test_parse_table,
         test_parse_sections,
+        test_parse_bullets,
         test_deobfuscation,
         test_junk_filter,
         test_enrichment_and_mx_suppression,
         test_output_columns,
         test_output_blocks,
+        test_output_bullets,
     ):
         t()
     print()

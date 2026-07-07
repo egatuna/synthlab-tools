@@ -82,6 +82,16 @@ class Server:
 
 CFG = seoscout.Config(max_pages=25, crawl_delay_s=0.0, timeout_s=10.0, lighthouse=False)
 
+try:  # pytest compatibility — the canonical entry point is still `python3 tests/test_offline.py`
+    import pytest
+
+    @pytest.fixture(name="base")
+    def _base_fixture():
+        with Server() as url:
+            yield url
+except ImportError:
+    pass
+
 
 def test_crawl(base: str):
     print("test_crawl")

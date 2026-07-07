@@ -195,6 +195,15 @@ class Business:
 
 
 _URL_RE = re.compile(r"https?://[^\s)\]<>\"']+")
+# Bare domains ("stripe.com", "www.acme.net/path") — common in hand-written lead
+# lists. Negative lookbehind keeps email domains (john@acme.com) out. TLD list is
+# deliberately conservative so filenames (leads.md, hunter.py) never match.
+_BARE_DOMAIN_RE = re.compile(
+    r"(?<![@\w.-])((?:www\.)?[a-z0-9](?:[a-z0-9-]*[a-z0-9])?"
+    r"(?:\.[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)*"
+    r"\.(?:com|net|org|io|co|us|biz|info)(?:/[^\s|)\]<>\"']*)?)",
+    re.I,
+)
 _OWNER_RE = re.compile(r"owner[^A-Za-z0-9]{0,3}\s*([A-Z][A-Za-z]+(?:\s+[A-Z][A-Za-z]+)?)", re.I)
 
 
@@ -203,7 +212,8 @@ def _is_facebook(url: str) -> bool:
 
 
 def _classify_urls(text: str) -> tuple[str | None, str | None]:
-    """Return (website, facebook) — first non-FB http URL, first FB URL."""
+    """Return (website, facebook) — first non-FB http URL, first FB URL.
+    Falls back to bare domains when the text has no http(s) URL at all."""
     website = facebook = None
     for m in _URL_RE.finditer(text):
         url = m.group(0).rstrip(".,;")
@@ -211,6 +221,13 @@ def _classify_urls(text: str) -> tuple[str | None, str | None]:
             facebook = facebook or url
         else:
             website = website or url
+    if website is None and facebook is None:
+        for m in _BARE_DOMAIN_RE.finditer(text):
+            url = m.group(1).rstrip(".,;")
+            if _is_facebook(url):
+                facebook = facebook or url
+            else:
+                website = website or url
     return website, facebook
 
 
@@ -322,15 +339,54 @@ def _parse_blocks(text: str) -> list[Business]:
     return businesses
 
 
+_BULLET_RE = re.compile(r"^\s{0,3}[-*+]\s+(.*\S)\s*$")
+_PERSON_RE = re.compile(r"[A-Z][\w.'-]+(?:\s+[A-Z][\w.'-]+){1,2}")
+
+
+def _bullet_lead_cells(line: str) -> list[str] | None:
+    """Cells of a pipe-delimited bullet lead line ('- Name | acme.com | Jo Doe'),
+    or None if the line isn't one. Requires a pipe AND a URL/domain so that
+    prose bullets inside block-format files never match."""
+    m = _BULLET_RE.match(line)
+    if not m or "|" not in m.group(1):
+        return None
+    if _classify_urls(m.group(1)) == (None, None):
+        return None
+    return [c.strip() for c in m.group(1).split("|")]
+
+
+def _parse_bullets(text: str) -> list[Business]:
+    businesses: list[Business] = []
+    for ln in text.splitlines():
+        cells = _bullet_lead_cells(ln)
+        if cells is None:
+            continue
+        content = " ".join(cells)
+        website, fb = _classify_urls(content)
+        name = next((c.strip("*[] ") for c in cells
+                     if c and _classify_urls(c) == (None, None) and not _PERSON_RE.fullmatch(c)),
+                    None)
+        owner = next((c for c in cells[1:]
+                      if _classify_urls(c) == (None, None) and _PERSON_RE.fullmatch(c.strip())),
+                     None)
+        if name is None:
+            name = (owner or _domain_of(website or fb) or "Unknown")
+        businesses.append(Business(name=name or "Unknown", website=website,
+                                   facebook=fb, owner=owner or _extract_owner(content)))
+    return businesses
+
+
 def parse_leads(text: str) -> tuple[list[Business], str]:
     fmt = detect_format(text)
-    businesses = _parse_table(text) if fmt == "table" else _parse_blocks(text)
-    if not businesses and fmt == "table":
-        # fall back to block parse
-        businesses = _parse_blocks(text)
+    if fmt == "table":
+        businesses = _parse_table(text)
         if businesses:
-            fmt = "blocks"
-    return businesses, fmt
+            return businesses, fmt
+    blocks = _parse_blocks(text)
+    bullets = _parse_bullets(text)
+    if len(bullets) > len(blocks):
+        return bullets, "bullets"
+    return blocks, "blocks"
 
 
 # --- enrichment -------------------------------------------------------------
@@ -473,8 +529,26 @@ def _rewrite_blocks(text: str, results: list[Business]) -> str:
     return "\n".join(out) + ("\n" if text.endswith("\n") else "")
 
 
+def _rewrite_bullets(text: str, results: list[Business]) -> str:
+    queue = list(results)
+    out: list[str] = []
+    for ln in text.splitlines():
+        if _bullet_lead_cells(ln) is not None and queue:
+            biz = queue.pop(0)
+            email = biz.email or "—"
+            note = f"  _{biz.notes}_" if biz.notes else ""
+            out.append(f"{ln.rstrip()} | **Email:** {email} | **Confidence:** {biz.confidence}{note}")
+        else:
+            out.append(ln)
+    return "\n".join(out) + ("\n" if text.endswith("\n") else "")
+
+
 def render_output(text: str, results: list[Business], fmt: str) -> str:
-    return _rewrite_table(text, results) if fmt == "table" else _rewrite_blocks(text, results)
+    if fmt == "table":
+        return _rewrite_table(text, results)
+    if fmt == "bullets":
+        return _rewrite_bullets(text, results)
+    return _rewrite_blocks(text, results)
 
 
 # --- CLI --------------------------------------------------------------------
