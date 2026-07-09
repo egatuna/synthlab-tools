@@ -81,7 +81,7 @@ Two independent layers:
 | Flow             | Schedule      | What it does |
 |------------------|---------------|--------------|
 | `stripe-receipt` | every 30 min  | New Stripe payments (last 3 days) → receipt doc in `SynthLab/Receipts/` + thank-you Gmail draft. |
-| `jotform-intake` | every 30 min  | New Jotform submissions → line in the `SynthLab Intake Tracking` Drive doc + follow-up Gmail draft. |
+| `jotform-intake` | RETIRED | 2026-07-09, Jotform is ENS-only (owner directive) — see the note in the flow file. |
 | `morning-brief`  | 07:00 daily   | Unread inbox + today's calendar + last-24h Stripe → a `Morning Brief — <date>` Gmail draft to self. |
 
 ## Testing without spending plan credits

@@ -17,7 +17,7 @@ each tool's `config.yaml`).
 | `clip-forge/` | Opus Clip | `python3 clip-forge/clipforge.py run <video.mp4\|url>` |
 | `seo-scout/` | Ahrefs-lite / Ubersuggest | `python3 seo-scout/seoscout.py audit <url>` / `rank` |
 | `contact-hunter/` | Hunter + Apollo | `python3 contact-hunter/hunter.py run <leads.md>` |
-| `booking-bridge/` | Calendly | live form: https://form.jotform.com/261846157248061 (flows do the rest) |
+| `booking-bridge/` | Calendly | RETIRED 2026-07-09 — Jotform is ENS-only (owner directive); rebuild on Netlify Forms if needed |
 | `post-batcher/` | Buffer | `python3 post-batcher/postbatcher.py plan "<brief>"` / `today` / `mark-posted` |
 | `notion-brain/` | Notion AI | `python3 notion-brain/brain.py ask "<question>"` / `index` / `digest` |
 | `shared/bg-remove.py`, `shared/img-resize.py` | Canva Pro | `python3 shared/bg-remove.py <dir>` / `img-resize.py <preset> <dir>` |

@@ -1,3 +1,12 @@
+> **RETIRED 2026-07-09 (owner directive: Jotform is ENS Staffing-only).**
+> This flow depended on a SynthLab form living on the ENS Jotform account —
+> that account's email defaults leak the ENS inbox and brand, and no SynthLab
+> form may exist there. It was already paused by the MCP headless-connector
+> regression (claude-code#75059) and is now retired outright. If booking/intake
+> comes back, rebuild it on Netlify Forms (see
+> synthlab-games/gift-pipeline/intake/ for the working pattern) or a
+> SynthLab-owned account. Do not re-enable as-is.
+
 ---
 name: booking-slots-refresh
 schedule: "0 6 * * 1"
