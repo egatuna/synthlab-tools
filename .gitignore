@@ -1,4 +1,9 @@
 .env
+# any .env variant: backups, dated copies, per-env files.
+# Bare ".env" does NOT match ".env.bak-*" — a backup holding a live
+# CLAUDE_CODE_OAUTH_TOKEN was stageable until 2026-07-28.
+.env.*
+!.env.example
 tools.db
 logs/
 __pycache__/
@@ -8,3 +13,6 @@ clip-forge/work/
 notion-brain/cache/
 automation-runner/state/
 .DS_Store
+# reports written by the offline test suite (fixture site on 127.0.0.1)
+seo-scout/reports/0.1-*.md
+!seo-scout/reports/0.1-2026-07-0*.md

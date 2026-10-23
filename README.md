@@ -1,64 +1,53 @@
 # synthlab-tools
 
-Internal CLI suite replacing ~$140–250/mo of SaaS subscriptions. Everything
-runs headless via cron + `claude -p` + the Anthropic API. No web UIs.
+A suite of small command-line tools I built to replace paid SaaS subscriptions for
+[SynthLab](https://synthlabco.com), my one-person web studio. Each tool covers one job a paid
+product used to do (email finding, SEO audits, short-form video clipping, social scheduling,
+document Q&A, workflow automation), runs locally, and uses Claude for the steps that need
+judgment.
 
-**Global by design.** Nothing here is scoped to a project: cron runs
-machine-wide, and `bin/` is on PATH (via `~/.zshrc`), so from any directory:
-`clip-forge run <video>`, `seo-scout audit <url>`, `contact-hunter run
-<leads.md>`, `post-batcher plan "<brief>"`, `notion-brain ask "<q>"`,
-`flows list|run|validate`, `bg-remove <dir>`, `img-resize <preset> <dir>`.
-"SynthLab" only appears in editable defaults (voice/keywords/email copy in
-each tool's `config.yaml`).
+About 4,250 lines of Python, with offline test suites that run without network access or API calls.
 
-| Tool | Replaces | Run it |
+## Tools
+
+| Tool | Replaces | What it does |
 |---|---|---|
-| `automation-runner/` | Zapier | `python3 automation-runner/runner.py tick\|run\|validate\|list` |
-| `clip-forge/` | Opus Clip | `python3 clip-forge/clipforge.py run <video.mp4\|url>` |
-| `seo-scout/` | Ahrefs-lite / Ubersuggest | `python3 seo-scout/seoscout.py audit <url>` / `rank` |
-| `contact-hunter/` | Hunter + Apollo | `python3 contact-hunter/hunter.py run <leads.md>` |
-| `booking-bridge/` | Calendly | RETIRED 2026-07-09 — Jotform is ENS-only (owner directive); rebuild on Netlify Forms if needed |
-| `post-batcher/` | Buffer | `python3 post-batcher/postbatcher.py plan "<brief>"` / `today` / `mark-posted` |
-| `notion-brain/` | Notion AI | `python3 notion-brain/brain.py ask "<question>"` / `index` / `digest` |
-| `shared/bg-remove.py`, `shared/img-resize.py` | Canva Pro | `python3 shared/bg-remove.py <dir>` / `img-resize.py <preset> <dir>` |
+| [`contact-hunter/`](contact-hunter/) | Hunter, Apollo | Reads a markdown lead list, scrapes each business's site and contact pages for emails (including `name (at) domain` obfuscation), falls back to pattern guesses, and **drops any address whose domain has no MX record**. Every result gets a `confirmed` or `plausible` confidence label. |
+| [`seo-scout/`](seo-scout/) | Ahrefs-lite | `audit <url>` crawls a site (robots-aware, same domain), runs Lighthouse, has an LLM grade it, and writes a plain-language client report. `rank` tracks keyword positions over time in SQLite. |
+| [`clip-forge/`](clip-forge/) | Opus Clip | Turns a long video into vertical clips: faster-whisper transcription with word timestamps, LLM clip selection with hook scores, ffmpeg 9:16 crop with burned-in word-synced captions. |
+| [`post-batcher/`](post-batcher/) | Buffer | Generates a week of platform-specific posts (X, LinkedIn, TikTok) into an editable markdown queue, enforces each platform's character limit in code, and serves the day's posts as a digest. |
+| [`notion-brain/`](notion-brain/) | Notion AI | Indexes synced Google Docs into SQLite FTS5 and answers questions grounded only in the retrieved excerpts, with citations. BM25 instead of embeddings on purpose: no extra model, no extra API, and ~200 docs index in seconds. |
+| [`automation-runner/`](automation-runner/) | Zapier | A "zap" is a markdown file with YAML frontmatter (schedule, enabled, allowed tools). A cron dispatcher runs whatever is due through headless Claude Code with only the MCP servers that flow declares. Idempotent, and one broken flow never aborts the rest. |
+| `shared/bg-remove.py`, `shared/img-resize.py` | Canva Pro | Background removal (rembg) and preset image resizing (Pillow). |
 
-Framer/Webflow/v0 need no build here — covered by the existing
-website-builder + design skills with GitHub Pages hosting. **Do not buy
-Canva Pro** — bg-remove (rembg) and img-resize (Pillow presets) cover the
-paid features used.
+## Design choices
 
-## Shared infrastructure
+- **Testable offline.** Network, subprocess, and LLM calls sit behind module-level functions,
+  and most tools take `--mock-llm`, so every pipeline can run end to end in tests for free.
+- **Two-tier models.** `shared/llm.py` routes routine calls to a cheaper model and
+  judgment calls (clip scoring, SEO grading) to a stronger one, with automatic fallback.
+  Both are overridable via `SYNTHLAB_LLM_DEFAULT` / `SYNTHLAB_LLM_JUDGMENT`.
+- **Nothing fails silently.** `shared/notify.py` writes dated logs, drafts a failure email,
+  and falls back to a desktop notification.
+- **One schedule file.** `crontab.txt` is the single source of truth for what runs when.
+- **No secrets in the repo.** Keys live in a gitignored `.env` (see `.env.example`); the
+  Claude Code CLI uses its own login.
 
-- `shared/llm.py` — LLM wrapper. Default model `claude-sonnet-4-6`; judgment
-  calls (`judgment=True`: clip scoring, SEO grading) use `claude-fable-5`
-  with an automatic server-side fallback to `claude-opus-4-8` on safety
-  refusals. Backend: Anthropic SDK when `ANTHROPIC_API_KEY` is in `.env`,
-  otherwise `claude -p` on the local Claude Code (Max plan) login.
-- `shared/db.py` — one `tools.db` (SQLite): per-tool KV, seen-ID idempotency,
-  run history. Tools may add their own tables.
-- `shared/notify.py` — dated logs in `logs/<tool>/`; failures create a Gmail
-  draft `[synthlab-tools] <tool> failed: <reason>` and fall back to a macOS
-  notification + `logs/failures.log`. Nothing fails silently.
-- MCPs (Gmail, Calendar, Drive, Jotform, Stripe) are reached through
-  headless `claude -p` — flows declare which servers they may touch.
+## Status
 
-## Flows (the Zapier model)
+| Tool | State |
+|---|---|
+| contact-hunter, seo-scout, clip-forge, post-batcher, notion-brain, image tools | Working; run on demand or from `crontab.txt` |
+| automation-runner | Paused: headless MCP connectors regressed upstream in Claude Code; re-enables once fixed |
+| `booking-bridge/` | Retired (kept for reference); its form backend was moved to a different service |
 
-A "zap" is a markdown file with YAML frontmatter (`schedule`, `enabled`,
-`allowed_tools`) in `automation-runner/flows/`, `booking-bridge/flows/`, or
-`notion-brain/flows/`. The dispatcher tick (cron, every 5 min) runs whatever
-is due. **Adding an automation = adding a file.** Validate with
-`runner.py validate` before enabling.
+## Run it
 
-## Schedules
+```bash
+python3 -m pip install pyyaml requests beautifulsoup4 dnspython croniter anthropic  # clip-forge also needs ffmpeg, faster-whisper, yt-dlp
+cp .env.example .env                                         # optional: ANTHROPIC_API_KEY
+python3 -m pytest -q                                         # offline test suite
+python3 seo-scout/seoscout.py audit https://example.com --mock-llm
+```
 
-`crontab.txt` is the single source of truth. Install: `crontab crontab.txt`.
-
-## Setup notes
-
-- `.env` (optional): `ANTHROPIC_API_KEY=` to use the API instead of the
-  Max-plan CLI backend. Copy from `.env.example`.
-- Stripe MCP must be connected in Claude Code for the stripe-receipt flow;
-  until then the flow reports `FLOW_FAIL: stripe mcp unavailable` (visible,
-  not silent).
-- clip-forge deps: ffmpeg (installed via brew), faster-whisper, yt-dlp.
+Without `ANTHROPIC_API_KEY`, LLM calls go through the local `claude -p` CLI instead of the API.
